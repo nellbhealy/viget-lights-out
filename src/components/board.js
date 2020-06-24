@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const Board = props => {
     return (
@@ -12,8 +13,8 @@ export const Board = props => {
 };
 
 Board.propTypes = {
-    lights: React.PropTypes.array,
-    numMoves: React.PropTypes.number,
-    reset: React.PropTypes.func,
-    winComponent: React.PropTypes.element,
+    lights: PropTypes.array,
+    numMoves: PropTypes.number,
+    reset: PropTypes.func,
+    winComponent: PropTypes.element,
 };

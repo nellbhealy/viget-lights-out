@@ -45,15 +45,13 @@ export class BoardContainer extends React.Component {
 
     flipTheLights = (row, col) => {
         for (let x = -1; x < 2; x++) {
-            for (let y = -1; y < 2; y++) {
-                if (
-                    row + y < 5 &&
-                    row + y >= 0 &&
-                    col + x < 5 &&
-                    col + x >= 0
-                ) {
-                    this.flip(row + y, col + x);
-                }
+            if (col + x < 5 && col + x >= 0) {
+                this.flip(row, col + x);
+            }
+        }
+        for (let y = -1; y < 2; y++) {
+            if (row + y < 5 && row + y >= 0 && y != 0) {
+                this.flip(row + y, col);
             }
         }
     };
@@ -94,6 +92,7 @@ export class BoardContainer extends React.Component {
             for (let col = 0; col < 5; col++) {
                 lights[row].push(
                     <Light
+                        key={`${row}-${col}`}
                         handleClick={this.handleClick}
                         shouldBeOn={this.shouldBeOn}
                         row={row}

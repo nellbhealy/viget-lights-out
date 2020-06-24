@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export class Light extends React.Component {
     onClick = () => {
@@ -16,8 +17,8 @@ export class Light extends React.Component {
 }
 
 Light.propTypes = {
-    handleClick: React.PropTypes.func,
-    shouldBeOn: React.PropTypes.func,
-    row: React.PropTypes.number,
-    col: React.PropTypes.number,
+    handleClick: PropTypes.func,
+    shouldBeOn: PropTypes.func,
+    row: PropTypes.number,
+    col: PropTypes.number,
 };
