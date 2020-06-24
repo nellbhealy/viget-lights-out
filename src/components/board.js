@@ -6,6 +6,7 @@ export const Board = props => {
             <div className="grid-container">{props.lights}</div>
             <p>{props.numMoves}</p>
             <button onClick={props.reset}>Reset</button>
+            {props.winComponent}
         </div>
     );
 };

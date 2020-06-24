@@ -8,6 +8,7 @@ export class BoardContainer extends React.Component {
         this.state = {
             board: [],
             numMoves: 0,
+            winComponent: <p />,
         };
         this.board = this.getNewBoard();
     }
@@ -42,9 +43,7 @@ export class BoardContainer extends React.Component {
         this.board[row][col] = !this.board[row][col];
     };
 
-    handleClick = (row, col) => {
-        row = parseInt(row);
-        col = parseInt(col);
+    flipTheLights = (row, col) => {
         for (let x = -1; x < 2; x++) {
             for (let y = -1; y < 2; y++) {
                 if (
@@ -57,8 +56,29 @@ export class BoardContainer extends React.Component {
                 }
             }
         }
+    };
+
+    checkForWin = () => {
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                if (this.board[row][col]) return false;
+            }
+        }
+        return true;
+    };
+
+    win = () => {
+        let winComp = (
+            <div>Congratulations, you Won! Click reset to play again.</div>
+        );
+        this.setState({ winComponent: winComp });
+    };
+
+    handleClick = (row, col) => {
+        this.flipTheLights(row, col);
         this.state.numMoves++;
         this.setState({ board: this.board });
+        if (this.checkForWin()) this.win();
     };
 
     reset = () => {
@@ -67,7 +87,7 @@ export class BoardContainer extends React.Component {
         this.setState({ board: this.board });
     };
 
-    render() {
+    getLights = () => {
         let lights = [];
         for (let row = 0; row < 5; row++) {
             lights.push([]);
@@ -82,11 +102,16 @@ export class BoardContainer extends React.Component {
                 );
             }
         }
+        return lights;
+    };
+
+    render() {
         return (
             <Board
-                lights={lights}
+                lights={this.getLights()}
                 numMoves={this.state.numMoves}
                 reset={this.reset}
+                winComponent={this.state.winComponent}
             />
         );
     }
