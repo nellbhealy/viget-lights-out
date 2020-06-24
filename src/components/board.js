@@ -10,3 +10,10 @@ export const Board = props => {
         </div>
     );
 };
+
+Board.propTypes = {
+    lights: React.PropTypes.array,
+    numMoves: React.PropTypes.number,
+    reset: React.PropTypes.func,
+    winComponent: React.PropTypes.element,
+};

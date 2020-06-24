@@ -14,3 +14,10 @@ export class Light extends React.Component {
         );
     }
 }
+
+Light.propTypes = {
+    handleClick: React.PropTypes.func,
+    shouldBeOn: React.PropTypes.func,
+    row: React.PropTypes.number,
+    col: React.PropTypes.number,
+};
