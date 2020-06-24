@@ -1,24 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export class Light extends React.Component {
-    onClick = () => {
-        this.props.handleClick(this.props.row, this.props.col);
-    };
-
-    render() {
-        let onOrOff = this.props.shouldBeOn(this.props.row, this.props.col)
-            ? 'on'
-            : 'off';
-        return (
-            <button className={'grid-item ' + onOrOff} onClick={this.onClick} />
-        );
-    }
-}
+export const Light = props => {
+    let onOrOff = props.isOn ? 'on' : 'off';
+    return (
+        <button
+            data-testid={props.testid}
+            className={'grid-item ' + onOrOff}
+            onClick={props.handleClick}
+        />
+    );
+};
 
 Light.propTypes = {
     handleClick: PropTypes.func,
-    shouldBeOn: PropTypes.func,
-    row: PropTypes.number,
-    col: PropTypes.number,
+    isOn: PropTypes.bool,
 };

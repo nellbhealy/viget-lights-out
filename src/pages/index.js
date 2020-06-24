@@ -3,5 +3,5 @@ import './style.css';
 import { BoardContainer } from '../containers/board-container';
 
 export default function Home() {
-    return <BoardContainer />;
+    return <BoardContainer isTest={false} />;
 }

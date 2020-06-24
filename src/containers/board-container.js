@@ -1,6 +1,7 @@
 import React from 'react';
 import { Light } from '../components/light.js';
 import { Board } from '../components/board.js';
+import { startingBoardOne } from '../components/test-board.js';
 
 export class BoardContainer extends React.Component {
     constructor(props) {
@@ -8,7 +9,7 @@ export class BoardContainer extends React.Component {
         this.state = {
             board: [],
             numMoves: 0,
-            winComponent: <p />,
+            hasWon: false,
         };
         this.board = this.getNewBoard();
     }
@@ -18,6 +19,7 @@ export class BoardContainer extends React.Component {
      * If no lights get turned on, the method will call itself again.
      */
     getNewBoard = () => {
+        if (this.props.isTest) return startingBoardOne;
         let board = [];
         let isALightOn = false;
         for (let row = 0; row < 5; row++) {
@@ -66,10 +68,7 @@ export class BoardContainer extends React.Component {
     };
 
     win = () => {
-        let winComp = (
-            <div>Congratulations, you Won! Click reset to play again.</div>
-        );
-        this.setState({ winComponent: winComp });
+        this.setState({ hasWon: true });
     };
 
     handleClick = (row, col) => {
@@ -82,6 +81,7 @@ export class BoardContainer extends React.Component {
     reset = () => {
         this.board = this.getNewBoard();
         this.state.numMoves = 0;
+        this.state.hasWon = false;
         this.setState({ board: this.board });
     };
 
@@ -93,10 +93,9 @@ export class BoardContainer extends React.Component {
                 lights[row].push(
                     <Light
                         key={`${row}-${col}`}
-                        handleClick={this.handleClick}
-                        shouldBeOn={this.shouldBeOn}
-                        row={row}
-                        col={col}
+                        testid={`${row}-${col}`}
+                        handleClick={() => this.handleClick(row, col)}
+                        isOn={this.shouldBeOn(row, col)}
                     />
                 );
             }
