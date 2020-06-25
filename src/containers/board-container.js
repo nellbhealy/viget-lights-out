@@ -1,41 +1,19 @@
 import React from 'react';
-import { Light } from '../components/light.js';
 import { Board } from '../components/board.js';
-import { startingBoardOne } from '../components/test-board.js';
+import {
+    getNewBoard,
+    flipTheLights,
+    getLights,
+    checkForWin,
+} from '../game-logic.js';
 
 export class BoardContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            board: [],
-            numMoves: 0,
-            hasWon: false,
-        };
-        this.board = this.getNewBoard();
-    }
-
-    /**
-     * Decides which tiles start off in the On positon.
-     * If no lights get turned on, the method will call itself again.
-     */
-    getNewBoard = () => {
-        if (this.props.isTest) return startingBoardOne;
-        let board = [];
-        let isALightOn = false;
-        for (let row = 0; row < 5; row++) {
-            board.push([]);
-            for (let col = 0; col < 5; col++) {
-                let isOn = Math.random() < 0.1 ? true : false;
-                if (isOn) isALightOn = true;
-                board[row].push(isOn);
-            }
-        }
-        if (isALightOn) {
-            return board;
-        } else {
-            return this.getNewBoard();
-        }
+    state = {
+        numMoves: 0,
+        hasWon: false,
     };
+
+    board = this.props.startingBoard ? this.props.startingBoard : getNewBoard();
 
     shouldBeOn = (row, col) => {
         return this.board[row][col];
@@ -45,70 +23,28 @@ export class BoardContainer extends React.Component {
         this.board[row][col] = !this.board[row][col];
     };
 
-    flipTheLights = (row, col) => {
-        for (let x = -1; x < 2; x++) {
-            if (col + x < 5 && col + x >= 0) {
-                this.flip(row, col + x);
-            }
-        }
-        for (let y = -1; y < 2; y++) {
-            if (row + y < 5 && row + y >= 0 && y != 0) {
-                this.flip(row + y, col);
-            }
-        }
-    };
-
-    checkForWin = () => {
-        for (let row = 0; row < 5; row++) {
-            for (let col = 0; col < 5; col++) {
-                if (this.board[row][col]) return false;
-            }
-        }
-        return true;
-    };
-
     win = () => {
         this.setState({ hasWon: true });
     };
 
     handleClick = (row, col) => {
-        this.flipTheLights(row, col);
-        this.state.numMoves++;
-        this.setState({ board: this.board });
-        if (this.checkForWin()) this.win();
+        this.board = flipTheLights(this.board, row, col);
+        this.setState({ numMoves: ++this.state.numMoves });
+        if (checkForWin(this.board)) this.win();
     };
 
     reset = () => {
-        this.board = this.getNewBoard();
-        this.state.numMoves = 0;
-        this.state.hasWon = false;
-        this.setState({ board: this.board });
-    };
-
-    getLights = () => {
-        let lights = [];
-        for (let row = 0; row < 5; row++) {
-            lights.push([]);
-            for (let col = 0; col < 5; col++) {
-                lights[row].push(
-                    <Light
-                        key={`${row}-${col}`}
-                        testid={`${row}-${col}`}
-                        handleClick={() => this.handleClick(row, col)}
-                        isOn={this.shouldBeOn(row, col)}
-                    />
-                );
-            }
-        }
-        return lights;
+        this.board = getNewBoard();
+        this.setState({ numMoves: 0, hasWon: false });
     };
 
     render() {
         return (
             <Board
-                lights={this.getLights()}
+                lights={getLights(this.board, this.handleClick)}
                 numMoves={this.state.numMoves}
                 reset={this.reset}
+                hasWon={this.state.hasWon}
                 winComponent={this.state.winComponent}
             />
         );

@@ -1,21 +1,21 @@
 import React from 'react';
-import { Light } from '../components/light.js';
-import { render, cleanup, fireEvent } from '@testing-library/react';
-import { BoardContainer } from '../containers/board-container.js';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { BoardContainer } from '../containers/board-container.js';
+import { startingBoardOne } from '../components/test-board.js';
 
-afterEach(cleanup);
-
-it('should start off with the correct board', () => {
+it('should start off with the correct board when passed a starting board', () => {
     const { getByTestId, asFragment } = render(
-        <BoardContainer isTest={true} />
+        <BoardContainer startingBoard={startingBoardOne} />
     );
-    expect(asFragment(<BoardContainer isTest={true} />)).toMatchSnapshot();
+    expect(
+        asFragment(<BoardContainer startingBoard={startingBoardOne} />)
+    ).toMatchSnapshot();
 });
 
 it('should flip appropriate lights when clicked', () => {
-    const { getByTestId, asFragment } = render(
-        <BoardContainer isTest={true} />
+    const { getByTestId } = render(
+        <BoardContainer startingBoard={startingBoardOne} />
     );
 
     //click Light at grid position 0-1

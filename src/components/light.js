@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const classNames = require('classnames');
+
 export const Light = props => {
-    let onOrOff = props.isOn ? 'on' : 'off';
+    const lightClass = classNames({
+        'grid-item': true,
+        on: props.isOn,
+        off: !props.isOn,
+    });
     return (
         <button
             data-testid={props.testid}
-            className={'grid-item ' + onOrOff}
+            className={lightClass}
             onClick={props.handleClick}
         />
     );
