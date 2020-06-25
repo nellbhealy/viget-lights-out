@@ -11,37 +11,27 @@ export class BoardContainer extends React.Component {
     state = {
         numMoves: 0,
         hasWon: false,
-    };
-
-    board = this.props.startingBoard ? this.props.startingBoard : getNewBoard();
-
-    shouldBeOn = (row, col) => {
-        return this.board[row][col];
-    };
-
-    flip = (row, col) => {
-        this.board[row][col] = !this.board[row][col];
-    };
-
-    win = () => {
-        this.setState({ hasWon: true });
+        board: this.props.startingBoard,
     };
 
     handleClick = (row, col) => {
-        this.board = flipTheLights(this.board, row, col);
-        this.setState({ numMoves: ++this.state.numMoves });
-        if (checkForWin(this.board)) this.win();
+        let updatedBoard = flipTheLights(this.state.board, row, col);
+        let hasWon = checkForWin(updatedBoard);
+        this.setState({
+            board: updatedBoard,
+            numMoves: 1 + this.state.numMoves,
+            hasWon: hasWon,
+        });
     };
 
     reset = () => {
-        this.board = getNewBoard();
-        this.setState({ numMoves: 0, hasWon: false });
+        this.setState({ board: getNewBoard(), numMoves: 0, hasWon: false });
     };
 
     render() {
         return (
             <Board
-                lights={getLights(this.board, this.handleClick)}
+                lights={getLights(this.state.board, this.handleClick)}
                 numMoves={this.state.numMoves}
                 reset={this.reset}
                 hasWon={this.state.hasWon}
