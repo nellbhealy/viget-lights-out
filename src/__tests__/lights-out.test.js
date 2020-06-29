@@ -3,6 +3,7 @@ import { render, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import BoardContainer from '../containers/board-container.js';
 import { startingBoardOne, solveable } from '../components/test-board.js';
+import { WIN_TEXT } from '../components/board.js';
 
 afterEach(cleanup);
 
@@ -40,9 +41,7 @@ it('should display winning message when all lights are off', () => {
     );
 
     fireEvent.click(getByTestId('1-1'));
-    expect(getByTestId('win-div')).toHaveTextContent(
-        'Congratulations, you Won! Click reset to play again.'
-    );
+    expect(getByTestId('win-div')).toHaveTextContent(WIN_TEXT);
 });
 
 it('should remove winning message and reset moves to zero when the reset button is clicked', () => {
@@ -51,9 +50,7 @@ it('should remove winning message and reset moves to zero when the reset button 
     );
 
     fireEvent.click(getByTestId('1-1'));
-    expect(getByTestId('win-div')).toHaveTextContent(
-        'Congratulations, you Won! Click reset to play again.'
-    );
+    expect(getByTestId('win-div')).toHaveTextContent(WIN_TEXT);
 
     fireEvent.click(getByTestId('reset'));
     expect(getByTestId('win-div')).toBeUndefined();
