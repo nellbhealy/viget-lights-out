@@ -6,7 +6,7 @@ export const startingBoardOne = [
     [false, false, false, false, false],
 ];
 
-const solveable = [
+export const solveable = [
     [false, true, false, false, false],
     [true, true, true, false, false],
     [false, true, false, false, false],
