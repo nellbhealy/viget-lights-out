@@ -1,16 +1,17 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BoardContainer } from '../containers/board-container.js';
-import { startingBoardOne } from '../components/test-board.js';
+import BoardContainer from '../containers/board-container.js';
+import { startingBoardOne, solveable } from '../components/test-board.js';
+import { WIN_TEXT } from '../components/board.js';
+
+afterEach(cleanup);
 
 it('should start off with the correct board when passed a starting board', () => {
     const { getByTestId, asFragment } = render(
         <BoardContainer startingBoard={startingBoardOne} />
     );
-    expect(
-        asFragment(<BoardContainer startingBoard={startingBoardOne} />)
-    ).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
 });
 
 it('should flip appropriate lights when clicked', () => {
@@ -32,4 +33,25 @@ it('should flip appropriate lights when clicked', () => {
     expect(getByTestId('2-3')).toHaveClass('on');
     expect(getByTestId('2-4')).toHaveClass('on');
     expect(getByTestId('3-3')).toHaveClass('on');
+});
+
+it('should display winning message when all lights are off', () => {
+    const { getByTestId } = render(
+        <BoardContainer startingBoard={solveable} />
+    );
+
+    fireEvent.click(getByTestId('1-1'));
+    expect(getByTestId('win-div')).toHaveTextContent(WIN_TEXT);
+});
+
+it('should remove winning message and reset moves to zero when the reset button is clicked', () => {
+    const { getByTestId } = render(
+        <BoardContainer startingBoard={solveable} />
+    );
+
+    fireEvent.click(getByTestId('1-1'));
+    expect(getByTestId('win-div')).toHaveTextContent(WIN_TEXT);
+
+    fireEvent.click(getByTestId('reset'));
+    expect(getByTestId('win-div')).toBeUndefined();
 });

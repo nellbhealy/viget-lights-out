@@ -1,5 +1,6 @@
-import React from 'react';
-import { Board } from '../components/board.js';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Board from '../components/board.js';
 import {
     getNewBoard,
     flipTheLights,
@@ -7,36 +8,39 @@ import {
     checkForWin,
 } from '../game-logic.js';
 
-export class BoardContainer extends React.Component {
-    state = {
+const BoardContainer = props => {
+    const [data, setData] = useState({
         numMoves: 0,
         hasWon: false,
-        board: this.props.startingBoard,
-    };
+        board: props.startingBoard,
+    });
 
-    handleClick = (row, col) => {
-        let updatedBoard = flipTheLights(this.state.board, row, col);
-        let hasWon = checkForWin(updatedBoard);
-        this.setState({
+    const handleClick = (row, col) => {
+        const updatedBoard = flipTheLights(data.board, row, col);
+        const hasWon = checkForWin(updatedBoard);
+        setData({
             board: updatedBoard,
-            numMoves: 1 + this.state.numMoves,
+            numMoves: 1 + data.numMoves,
             hasWon: hasWon,
         });
     };
 
-    reset = () => {
-        this.setState({ board: getNewBoard(), numMoves: 0, hasWon: false });
+    const reset = () => {
+        setData({ board: getNewBoard(), numMoves: 0, hasWon: false });
     };
 
-    render() {
-        return (
-            <Board
-                lights={getLights(this.state.board, this.handleClick)}
-                numMoves={this.state.numMoves}
-                reset={this.reset}
-                hasWon={this.state.hasWon}
-                winComponent={this.state.winComponent}
-            />
-        );
-    }
-}
+    return (
+        <Board
+            lights={getLights(data.board, handleClick)}
+            numMoves={data.numMoves}
+            reset={reset}
+            hasWon={data.hasWon}
+        />
+    );
+};
+
+BoardContainer.propTypes = {
+    startingBoard: PropTypes.array,
+};
+
+export default BoardContainer;

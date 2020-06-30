@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should start off with the correct board 1`] = `
+exports[`should start off with the correct board when passed a starting board 1`] = `
 <DocumentFragment>
   <div
     class="root"
@@ -112,7 +112,9 @@ exports[`should start off with the correct board 1`] = `
     <p>
       0
     </p>
-    <button>
+    <button
+      data-testid="reset"
+    >
       Reset
     </button>
   </div>
